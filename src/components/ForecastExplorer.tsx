@@ -16,7 +16,6 @@ import {
   Zap,
   Clock,
   ArrowUpRight,
-  CheckCircle2,
   AlertTriangle,
   Flame,
   Droplets,
@@ -215,15 +214,8 @@ export const ForecastExplorer: React.FC<ForecastExplorerProps> = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-      {/* Top Main Section: Left Chart Card (2/3) + Right Widgets (1/3) */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'minmax(0, 1fr) 340px',
-        gap: 22,
-        alignItems: 'start'
-      }}>
-        {/* Main Left Card: Top 3 Stat Items + Combined Chart */}
-        <div className="warm-card" style={{ padding: 26 }}>
+      {/* Top Main Section: Full-Width Chart Card */}
+      <div className="warm-card" style={{ padding: 26, width: '100%' }}>
           {/* Top 3 Dynamic Stat Items */}
           <div style={{
             display: 'grid',
@@ -378,121 +370,6 @@ export const ForecastExplorer: React.FC<ForecastExplorerProps> = ({
           </div>
         </div>
 
-        {/* Right Stack of 3 Cards (Battery Capsule, Performance Arc, System Health) */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-          {/* Card 1: Tracking Fidelity Capsule Meter */}
-          <div className="warm-card" style={{ padding: 22 }}>
-            <div className="card-header-row">
-              <span className="card-title-text">Tracking Fidelity</span>
-              <ArrowUpRight size={18} className="card-arrow-icon" />
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12, fontSize: '0.8rem', color: '#059669', fontWeight: 600 }}>
-              <CheckCircle2 size={15} color="#10b981" />
-              <span>In Tolerance (&plusmn;150 MW)</span>
-            </div>
-
-            {/* Chunky Capsule Bar */}
-            <div className="capsule-meter-box">
-              <div
-                className="capsule-meter-bar"
-                style={{ width: `${stats.trackingFidelity}%` }}
-              >
-                <span>{stats.trackingFidelity}%</span>
-              </div>
-            </div>
-            <div style={{ fontSize: '0.72rem', color: '#71717a', marginTop: 8, display: 'flex', justifyContent: 'space-between' }}>
-              <span>Tolerance Band: &plusmn;150 MW</span>
-              <strong>{stats.withinToleranceCount} / {stats.count} SPs</strong>
-            </div>
-          </div>
-
-          {/* Card 2: Performance Trend Arc Gauge */}
-          <div className="warm-card" style={{ padding: 22 }}>
-            <div className="card-header-row">
-              <span className="card-title-text">Performance Trend</span>
-              <ArrowUpRight size={18} className="card-arrow-icon" />
-            </div>
-
-            {/* Dynamic Legend */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: '0.75rem', marginBottom: 10 }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#71717a' }}>
-                <span style={{ width: 8, height: 8, borderRadius: 2, background: '#f59e0b' }}></span>
-                Daily Average
-              </span>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#71717a' }}>
-                <span style={{ width: 8, height: 8, borderRadius: 2, background: '#fb7185' }}></span>
-                Peak Gen
-              </span>
-            </div>
-
-            {/* Semicircular SVG Arc Gauge */}
-            <div style={{ position: 'relative', width: '100%', height: 110, display: 'flex', justifyContent: 'center' }}>
-              <svg width="220" height="110" viewBox="0 0 220 110">
-                <defs>
-                  <linearGradient id="warmArcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#fbbf24" />
-                    <stop offset="60%" stopColor="#f59e0b" />
-                    <stop offset="100%" stopColor="#fb7185" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M 20 100 A 90 90 0 0 1 200 100"
-                  fill="none"
-                  stroke="#f4f1ea"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M 20 100 A 90 90 0 0 1 200 100"
-                  fill="none"
-                  stroke="url(#warmArcGradient)"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeDasharray="283"
-                  strokeDashoffset={283 * (1 - Math.min(1, stats.avgActual / Math.max(1, stats.peakActual)))}
-                  style={{ transition: 'stroke-dashoffset 0.8s ease' }}
-                />
-              </svg>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginTop: -6, fontSize: '0.8rem', fontWeight: 700 }}>
-              <span style={{ color: '#d97706', display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#f59e0b' }}></span>
-                Avg: {stats.avgActual.toLocaleString()} MW
-              </span>
-              <span style={{ color: '#e11d48', display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#fb7185' }}></span>
-                Peak: {stats.peakActual.toLocaleString()} MW
-              </span>
-            </div>
-            <div style={{ textAlign: 'center', marginTop: 8, fontSize: '0.72rem', color: '#71717a' }}>
-              Capacity Factor: <strong>{((stats.avgActual / Math.max(1, stats.peakActual)) * 100).toFixed(0)}%</strong> of window peak
-            </div>
-          </div>
-
-          {/* Card 3: System Health Pill Box */}
-          <div className="warm-card" style={{ padding: 22 }}>
-            <div className="card-header-row">
-              <span className="card-title-text">System Health</span>
-              <ArrowUpRight size={18} className="card-arrow-icon" />
-            </div>
-
-            <div className="health-pill-frame">
-              <span style={{ fontSize: '2.1rem', fontWeight: 800, color: '#18181b', fontFamily: 'var(--font-mono)' }}>
-                {stats.volumeAccuracy.toFixed(1)}%
-              </span>
-            </div>
-
-            <div style={{ textAlign: 'center', marginTop: 10, fontSize: '0.78rem', color: '#71717a', fontWeight: 600 }}>
-              Volume Accuracy (100% &minus; {stats.wape.toFixed(1)}% WAPE)
-            </div>
-            <div style={{ textAlign: 'center', marginTop: 4, fontSize: '0.72rem', color: '#a1a1aa' }}>
-              Evaluated across {stats.totalActualGWh.toFixed(1)} GWh Delivered
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Dynamic Analytical Summary Cards: Volumetric Balance + Extreme Settlement Periods */}
       <div style={{
