@@ -1,0 +1,613 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Warm Minimalist Cream Reference Palette */
+  --bg-main: #fbf9f5;
+  --bg-subtle: #f6f3eb;
+  --bg-sidebar: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --bg-input: #ffffff;
+
+  --border-warm: rgba(226, 220, 208, 0.75);
+  --border-subtle: #eae5db;
+  --border-focus: #f59e0b;
+
+  --color-text-main: #18181b;
+  --color-text-muted: #52525b;
+  --color-text-dim: #a1a1aa;
+
+  /* Reference Accent Colors */
+  --accent-amber: #f59e0b;
+  --accent-amber-light: #fef3c7;
+  --accent-amber-glow: rgba(245, 158, 11, 0.25);
+
+  --accent-sage: #10b981;
+  --accent-sage-light: #ecfdf5;
+
+  --accent-coral: #fb7185;
+  --accent-coral-light: #fff1f2;
+
+  --accent-violet: #8b5cf6;
+  --accent-violet-light: #f5f3ff;
+
+  --accent-charcoal: #18181b;
+
+  --shadow-warm-sm: 0 2px 6px -1px rgba(160, 140, 110, 0.05);
+  --shadow-warm-md: 0 10px 25px -4px rgba(160, 140, 110, 0.07), 0 4px 10px -2px rgba(160, 140, 110, 0.03);
+  --shadow-warm-lg: 0 20px 35px -6px rgba(160, 140, 110, 0.1), 0 8px 16px -3px rgba(160, 140, 110, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-main);
+  color: var(--color-text-main);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom delicate scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f6f3eb;
+}
+::-webkit-scrollbar-thumb {
+  background: #dcd6c8;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #beb6a4;
+}
+
+/* Application Shell Layout */
+.crm-app-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-main);
+}
+
+/* CRM Sidebar in Warm Cream Aesthetic */
+.crm-sidebar {
+  width: 260px;
+  min-width: 260px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-warm);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 30;
+  transition: width 0.3s cubic-bezier(0.2, 0, 0, 1), min-width 0.3s cubic-bezier(0.2, 0, 0, 1);
+  will-change: width, min-width;
+  overflow-x: hidden;
+}
+
+.crm-sidebar.collapsed {
+  width: 76px;
+  min-width: 76px;
+}
+
+/* Smooth Fade & Slide for all text elements inside sidebar */
+.crm-brand-details,
+.crm-nav-label,
+.crm-nav-section-title,
+.crm-sync-details {
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 1;
+  max-width: 190px;
+  transform: translateX(0);
+  transition: opacity 0.22s cubic-bezier(0.2, 0, 0, 1),
+              transform 0.25s cubic-bezier(0.2, 0, 0, 1),
+              max-width 0.28s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.crm-sidebar.collapsed .crm-brand-details,
+.crm-sidebar.collapsed .crm-nav-label,
+.crm-sidebar.collapsed .crm-nav-section-title,
+.crm-sidebar.collapsed .crm-sync-details {
+  opacity: 0;
+  max-width: 0;
+  transform: translateX(-10px);
+  pointer-events: none;
+}
+
+/* Collapse / Expand Toggle Button */
+.crm-collapse-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #71717a;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.crm-collapse-btn:hover {
+  background: #f4f1ea;
+  color: #18181b;
+  border-color: var(--border-warm);
+}
+
+.crm-sidebar.collapsed .crm-collapse-btn {
+  margin-left: 0;
+  margin-top: 4px;
+}
+
+.crm-sidebar-header {
+  padding: 20px 18px 16px 18px;
+  border-bottom: 1px solid var(--border-warm);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: padding 0.3s cubic-bezier(0.2, 0, 0, 1);
+  overflow: hidden;
+}
+
+.crm-sidebar.collapsed .crm-sidebar-header {
+  padding: 18px 10px 14px 10px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.crm-logo-box {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  flex-shrink: 0;
+}
+
+.crm-brand-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-text-main);
+  letter-spacing: -0.02em;
+}
+
+.crm-brand-sub {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #d97706;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* CRM Sidebar Navigation */
+.crm-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 14px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: padding 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.crm-sidebar.collapsed .crm-nav-list {
+  padding: 18px 8px;
+}
+
+.crm-nav-section-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-dim);
+  padding: 8px 12px 4px 12px;
+}
+
+.crm-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, padding 0.3s cubic-bezier(0.2, 0, 0, 1);
+  text-align: left;
+  width: 100%;
+  overflow: hidden;
+}
+
+.crm-sidebar.collapsed .crm-nav-item {
+  padding: 10px 0;
+  justify-content: center;
+  gap: 0;
+}
+
+.crm-nav-item:hover {
+  color: var(--color-text-main);
+  background: #fbf9f4;
+  border-color: rgba(226, 220, 208, 0.4);
+}
+
+.crm-nav-item.active {
+  color: #18181b;
+  background: #fef8ee;
+  border-color: #fde68a;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.1);
+  font-weight: 700;
+}
+
+.crm-nav-item.active .crm-nav-icon {
+  color: #d97706;
+}
+
+.crm-nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #71717a;
+  min-width: 24px;
+  flex-shrink: 0;
+}
+
+/* CRM Sidebar Footer */
+.crm-sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid var(--border-warm);
+  background: #ffffff;
+}
+
+.crm-sync-card {
+  padding: 14px;
+  background: #faf8f3;
+  border: 1px solid var(--border-warm);
+  border-radius: 14px;
+  font-size: 0.75rem;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+/* Main Viewport */
+.crm-main-viewport {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow-y: auto;
+  background-color: var(--bg-main);
+}
+
+.crm-topbar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-warm);
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.crm-content-container {
+  padding: 26px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 1520px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Warm Minimalist Cards */
+.warm-card, .glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-warm);
+  border-radius: 22px;
+  box-shadow: var(--shadow-warm-md);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.warm-card:hover, .glass-card:hover {
+  box-shadow: var(--shadow-warm-lg);
+  border-color: #d6cfbf;
+}
+
+/* Card Header with Top-Right Diagonal Arrow */
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-title-text {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  letter-spacing: -0.01em;
+}
+
+.card-arrow-icon {
+  color: #a1a1aa;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.card-arrow-icon:hover {
+  color: var(--color-text-main);
+  transform: translate(2px, -2px);
+}
+
+/* Controls Bar */
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 22px;
+  flex-wrap: wrap;
+  background: #ffffff;
+  border: 1px solid var(--border-warm);
+  border-radius: 18px;
+  box-shadow: var(--shadow-warm-sm);
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.control-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Pill Buttons & Selectors */
+.btn-pill {
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: #ffffff;
+  border: 1px solid var(--border-warm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-pill:hover {
+  background: #faf8f3;
+  color: var(--color-text-main);
+  border-color: #beb6a4;
+}
+
+.btn-pill.active {
+  background: #18181b;
+  color: #ffffff;
+  border-color: #18181b;
+  box-shadow: 0 2px 6px rgba(24, 24, 27, 0.2);
+}
+
+/* Secondary Golden Pill */
+.btn-pill-amber.active {
+  background: #f59e0b;
+  color: #ffffff;
+  border-color: #d97706;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.select-input, .date-input {
+  background: #ffffff;
+  border: 1px solid var(--border-warm);
+  color: var(--color-text-main);
+  border-radius: 12px;
+  padding: 7px 12px;
+  font-size: 0.83rem;
+  font-family: inherit;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.select-input:focus, .date-input:focus {
+  border-color: var(--accent-amber);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+/* Pill Badges */
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.pill-badge-green {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.pill-badge-amber {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.pill-badge-violet {
+  background: #f5f3ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+}
+
+.pill-badge-gray {
+  background: #f4f4f5;
+  color: #71717a;
+  border: 1px solid #e4e4e7;
+}
+
+.pill-badge-coral {
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+}
+
+/* Reference Chunky Capsule Meter */
+.capsule-meter-box {
+  background: #f4f3ed;
+  border-radius: 18px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  height: 52px;
+}
+
+.capsule-meter-bar {
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+  border-radius: 14px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  font-weight: 800;
+  font-size: 1.45rem;
+  color: #18181b;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reference System Health Pill Box */
+.health-pill-frame {
+  border: 3.5px solid #fbbf24;
+  border-radius: 20px;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(251, 191, 36, 0.15);
+}
+
+/* Table styles */
+.data-table-container {
+  overflow-x: auto;
+  border-radius: 18px;
+  border: 1px solid var(--border-warm);
+  background: #ffffff;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+  text-align: left;
+}
+
+.data-table th {
+  position: sticky;
+  top: 0;
+  background: #faf8f4;
+  padding: 12px 16px;
+  font-weight: 700;
+  color: #52525b;
+  border-bottom: 1px solid var(--border-warm);
+  z-index: 2;
+  font-size: 0.73rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid #f4f1ea;
+  font-family: var(--font-mono);
+  color: #3f3f46;
+}
+
+.data-table tr:hover {
+  background: #fbf9f4;
+}
+
+/* Legacy Badge Compatibility */
+.badge-over {
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+.badge-under {
+  background: #f5f3ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+.badge-exact {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin-anim {
+  animation: spin 1s linear infinite;
+}
